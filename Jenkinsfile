@@ -59,8 +59,4 @@ pipeline{
             }
         }
     }
-    post{
-        always{
-        }
-    }
 }
