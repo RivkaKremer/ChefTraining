@@ -29,7 +29,7 @@ def groovyTool
 // ])
 
 
-pipeline{
+pipeline {
     agent {
         docker {
             reuseNode false
@@ -50,7 +50,6 @@ pipeline{
         )
     }
     stages{
-        stages {
         stage('Dependencies for Docker and ChefDK') {
             steps {
                 sh '''
