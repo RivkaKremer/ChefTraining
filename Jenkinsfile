@@ -20,7 +20,7 @@ properties([
                 script: [
                     classpath: [], 
                     sandbox: false, 
-                    script: "return ('aws ec2 describe-regions --all-regions --query Regions[].{Name:RegionName} --output text'.execute() | ['awk', '{ print $NF }'].execute()).text.tokenize().reverse()"
+                    script: "return ('aws ec2 describe-regions --all-regions --query Regions[].{Name:RegionName} --output text'.execute().text.tokenize().reverse())"
                 ]
             ]        
         ]
