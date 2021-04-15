@@ -35,8 +35,15 @@ pipeline {
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                     sh 'mkdir -p $CHEFREPO/chef-repo/cookcooks/apache'
+                    sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookcooks/apache'
+                    sh 'knife cookbook upload apache --force -o $CHEFREPO/chef-repo/cookcooks -c $CHEFREPO/chef-repo/.chef/knife.rb'
                 }
             }
+        }
+    }
+    post{
+        always{
+            sh 'rm -f chef-16.13.16-1.el7.x86_64.rpm'
         }
     }
 }
