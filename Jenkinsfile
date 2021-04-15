@@ -16,9 +16,7 @@ properties([
             randomName: 'choice-parameter-7601235200970', 
             script: [
                 $class: 'GroovyScript', 
-                fallbackScript: [classpath: [], 
-                sandbox: false, 
-                script: 'return ["ERROR"]'], 
+                fallbackScript: [classpath: [], sandbox: false, script: 'return ["ERROR"]'], 
                 script: [
                     classpath: [], 
                     sandbox: false, 
@@ -29,9 +27,6 @@ properties([
            
     ])   
 ])
-
-Permalink
-pkb12345
 
 
 pipeline{
