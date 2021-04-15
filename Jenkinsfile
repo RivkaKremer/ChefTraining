@@ -25,8 +25,8 @@ pipeline {
                         echo 'Chef is already installed...'
                     }
                     else{
-                        sh 'wget https://packages.chef.io/files/stable/chef/16.13.16/amazon/2/chef-16.13.16-1.el7.x86_64.rpm'
-                        sh 'sudo yum install chefdk_4.13.3-1_amd64.deb'
+                        sh 'wget https://packages.chef.io/files/stable/chefdk/4.13.3/el/8/chefdk-4.13.3-1.el7.x86_64.rpm'
+                        sh 'sudo yum install chefdk-4.13.3-1.el7.x86_64.rpm'
                     }
                 }
             }
