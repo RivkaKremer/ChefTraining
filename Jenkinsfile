@@ -61,8 +61,6 @@ pipeline{
     }
     post{
         always{
-            steps{
-                echo post
             }
         }
     }
