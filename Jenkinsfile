@@ -30,7 +30,13 @@ def groovyTool
 
 
 pipeline{
-    agent any
+    agent {
+        docker {
+            reuseNode false
+            args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
+            image 'chef/chefdk'
+        }
+    }
     options{
         buildDiscarder(logRotator(daysToKeepStr: DAY_TO_KEEP_STR, numToKeepStr: NUM_TO_KEEP_STR))
         timestamps()
@@ -44,18 +50,56 @@ pipeline{
         )
     }
     stages{
-        stage("Install ChefDK"){
-            steps{
-                script{
-                    chefdkExist = fileExists '/usr/bin/chef-client'
-                    if (chefdkExist){
-                        echo 'Chef is already installed...'
-                    }
-                    else{
-                        sh 'wget https://packages.chef.io/files/stable/chefdk/4.13.3/ubuntu/20.04/chefdk_4.13.3-1_amd64.deb'
-                        sh ' dpkg -i chefdk_4.13.3-1_amd64.deb'
-                    }
-                }
+        stages {
+        stage('Dependencies for Docker and ChefDK') {
+            steps {
+                sh '''
+                apt-get update
+                apt-get install -y sudo git build-essential apt-transport-https ca-certificates curl software-properties-common
+                '''
+            }
+        }
+        stage(']Install Docker-CE') {
+            steps {
+                sh '''
+                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+                add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+                apt-get update
+                apt-get install -y docker-ce
+                '''
+            }
+        }
+        stage('Start Docker') {
+            steps {
+                sh 'service docker start'
+            }
+        }
+        stage('Verify Docker') {
+            steps {
+                sh 'docker run --rm hello-world'
+            }
+        }
+        stage('Verify ChefDK') {
+            steps {
+                sh '''
+                /opt/chefdk/embedded/bin/chef --version
+                /opt/chefdk/embedded/bin/cookstyle --version
+                /opt/chefdk/embedded/bin/foodcritic --version
+                '''
+            }
+        }
+        stage('Verify Kitchen') {
+            steps { sh 'KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen list'
+            }
+        }
+        stage('Run test-kitchen') { 
+            steps {
+                sh '''KITCHEN_LOCAL_YAML=.kitchen.dokken.yml /opt/chefdk/embedded/bin/kitchen test centos'''
+            }
+        }
+        stage('Upload to Chef Server') {
+            steps { 
+                sh 'chef exec knife cookbook upload COOKBOOKNAME -o ../'
             }
         }
     }
