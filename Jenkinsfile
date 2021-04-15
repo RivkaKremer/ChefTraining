@@ -53,7 +53,7 @@ pipeline{
                     }
                     else{
                         sh 'wget https://packages.chef.io/files/stable/chefdk/4.13.3/ubuntu/20.04/chefdk_4.13.3-1_amd64.deb'
-                        sh 'sudo dpkg -i chefdk_4.13.3-1_amd64.deb'
+                        sh ' dpkg -i chefdk_4.13.3-1_amd64.deb'
                     }
                 }
             }
