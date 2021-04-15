@@ -18,11 +18,7 @@ pipeline{
                       description('Select your regoin')
                       choiceType('Filtered:List')
                       groovyScript {
-                          script('''
-                            def aws_regions_output = 'aws ec2 describe-regions --all-regions --query "Regions[].{Name:RegionName}" --output text'.execute() | ['awk', '{ print $NF }'].execute()
-                            def list = aws_regions_output.text.tokenize().reverse()
-                            return list
-                          ''')
+                          script(" return ('aws ec2 describe-regions --all-regions --query "Regions[].{Name:RegionName}" --output text'.execute() | ['awk', '{ print $NF }'].execute()).text.tokenize().reverse()")
                           fallbackScript('return ["error"]')
                       }
                   }
