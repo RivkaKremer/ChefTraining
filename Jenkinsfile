@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Upload Cookbook To Server, Converge Nodes'){
             steps{
-                withCredentials([zip(credetialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
+                withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                     sh 'mkdir -p $CHEFREPO/chef-repo/cookcooks/apache'
                 }
             }
