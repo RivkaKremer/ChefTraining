@@ -41,11 +41,17 @@ pipeline{
         )
     }
     stages{
-        stage("Initialization"){
+        stage("Install ChefDK"){
             steps{
                 script{
-                    groovyTool = load "${env.WORKSPACE}/buildTool.groovy"
-                    tool.installChef()
+                    chefdkExist = fileExists '/usr/bin/chef-client'
+                    if (chefdkExist){
+                        echo 'Chef is already installed...'
+                    }
+                    else{
+                        sh 'wget https://packages.chef.io/files/stable/chefdk/4.13.3/ubuntu/20.04/chefdk_4.13.3-1_amd64.deb'
+                        sh 'sudo dpkg -i chefdk_4.13.3-1_amd64.deb'
+                    }
                 }
             }
         }
