@@ -25,8 +25,9 @@ properties([
                     script: "return ('aws ec2 describe-regions --all-regions --query Regions[].{Name:RegionName} --output text'.execute() | ['awk', '{ print $NF }'].execute()).text.tokenize().reverse()"
                     ]
                 ]
-        ])
-])}}
+           ])
+        ]
+])
 
 Permalink
 pkb12345
