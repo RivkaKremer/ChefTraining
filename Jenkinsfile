@@ -36,8 +36,8 @@ pipeline {
             steps{
                 script{
                     withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
-                    sh 'mkdir -p $CHEFREPO/chef-repo/cookcooks/apache'
-                    sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookcooks/apache'
+                    sh 'mkdir -p $CHEFREPO/chef-repo/cookbooks/apache'
+                    sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookbooks/apache'
                     sh 'ls -aR $CHEFREPO'
                     dir("$CHEFREPO/chef-repo/cookbooks"){
                         sh 'ls -aR $CHEFREPO'
