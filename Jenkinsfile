@@ -39,11 +39,8 @@ pipeline {
                         script: "date '+%F %T'", 
                         returnStdout: true
                     ).trim()
-                    def text = readFile "apache/recipes/default.rb"
-                    text.replaceAll("<Place the content here>", "<h1>Welcome ${params['User']}</h1><h2>The time now is: ${currentTime}</h2>")
-                    writeFile file: "apache/recipes/default.rb", text: text
-
                 }
+                sh 'sed -i "s/<Place the content here>/<h1>Welcome ${params[\'User\']}</h1><h2>The time now is: ${currentTime}</h2>/g" terraform.tfvars'
                 sh 'cat apache/recipes/default.rb'
             }
         }
