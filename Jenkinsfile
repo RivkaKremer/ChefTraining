@@ -34,7 +34,12 @@ pipeline {
         }
         stage('Update Apache Html Content'){
             steps{
-                currentTime = sh(script: "date '+%F %T'", returnStdout: true).trim()
+                script{
+                    currentTime = sh(
+                        script: "date '+%F %T'", 
+                        returnStdout: true
+                    ).trim()
+                }
                 sh "sed -i 's/<Place the content here>/<h1>Welcome ${params['User']}</h1><h2>The time now is: $currentTime</h2>/' apache/recipes/default.rb"
                 sh 'cat apache/recipes/default.rb'
             }
