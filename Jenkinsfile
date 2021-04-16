@@ -13,7 +13,7 @@ pipeline {
             name: 'User', defaultValue: '', description: "Fill in a user name to be displayed on servers index.html page"
         )
         string(
-            name: 'Region', defaultValue: '', description: "Choose a region"
+            name: 'Region', defaultValue: 'eu-central-1', description: "Choose a region"
         )
     }
     stages{
