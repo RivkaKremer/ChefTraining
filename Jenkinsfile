@@ -91,7 +91,7 @@ pipeline {
         always{
             sh 'rm -f chef-16.13.16-1.el7.x86_64.rpm'
             emailext body: 'A Test EMail', 
-            recipientProviders: ['rivka/k@develeap.com'], 
+            recipientProviders: ['rivka.k@develeap.com'], 
             subject: 'Test'
         }
     }
