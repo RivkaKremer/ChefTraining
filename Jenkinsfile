@@ -93,7 +93,7 @@ pipeline {
             script{
                 emailext( 
                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                    to: 'rivky9505@gmail.com', 'taly.kishon@kaltura.com',
+                    to: 'rivky9505@gmail.com',
                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
                 )
             }
