@@ -40,7 +40,7 @@ pipeline {
                         returnStdout: true
                     ).trim()
                 }
-                sh 'sed -i "s/<Place the content here>/<h1>Welcome ${params[\'User\']}</h1><h2>The time now is: ${currentTime}</h2>/g" terraform.tfvars'
+                sh "sed -i 's/<Place the content here>/<h1>Welcome \${params['User']}</h1><h2>The time now is: \${currentTime}</h2>/g' apache/recipes/default.rb"
                 sh 'cat apache/recipes/default.rb'
             }
         }
