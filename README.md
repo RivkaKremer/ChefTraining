@@ -14,14 +14,11 @@
             
 ### stage 'Upload Cookbook To Chef Server':</br>
     1. copy the cookbook files from the local repository into the chef 
-       server's starter-kit cookbooks folder 
-       the starter kit is saved encripted in jenkins credentiald store
-       and is not located phisicaly on on the disc, but virtually, 
-       so it is kept safe.</br>
+       server's starter-kit cookbooks folder. 
+       The starter kit is saved encripted in jenkins credentiald store and is not located phisicaly on on the disc, only virtually, this is how it is kept safe.</br>
                    
-    2. upload/update the cookbook to chef server.
- </br>
-
+    2. upload/update the cookbook to chef server. </br>
+    
 ### stage 'Update Role On Chef Server': </br>
     1. I copy the role json file from local repo into the
        chef server's starter-kit roles folder </br>
