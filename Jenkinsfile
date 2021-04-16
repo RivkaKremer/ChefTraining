@@ -40,7 +40,7 @@ pipeline {
                     sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookcooks/apache'
                     sh 'ls -aR $CHEFREPO'
                     dir("$CHEFREPO/chef-repo/cookbooks"){
-                        sh 'ls -aR'
+                        sh 'ls -aR $CHEFREPO'
                         sh 'knife cookbook upload apache'
                     }
                 }
