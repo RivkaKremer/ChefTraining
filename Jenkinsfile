@@ -45,12 +45,10 @@ pipeline {
         }
         stage('Update Role On Chef Server'){
             steps{
-                script{
-                    withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
-                        sh 'mv webserver_role.json $CHEFREPO/chef-repo/roles'
-                        dir("$CHEFREPO/chef-repo/roles"){
-                            sh  (script: 'knife role from file webserver_role.json', returnStdout:true)
-                        }
+                withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
+                    sh 'mv webserver_role.json $CHEFREPO/chef-repo/roles'
+                    dir("$CHEFREPO/chef-repo/roles"){
+                        sh  (script: 'knife role from file webserver_role.json', returnStdout:true)
                     }
                 }
             }
