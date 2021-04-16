@@ -69,13 +69,11 @@ pipeline {
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                     dir("$CHEFREPO/chef-repo"){
-                        sh """
-                        sudo knife ec2 server create 
-                        -I ami-0db9040eb3ab74509 -r \"role[webserver_role]\" 
-                        -Z ${params['region']}b -g sg-0ad135270a3c8bbed --ssh-key 
-                        jenkins-slave -i ~/.ssh/jenkins-slave.pem -f t2.micro 
-                        --region ${params['region']} -U ec2-user --sudo --use-sudo-password
-                        """
+                        sh "sudo knife ec2 server create \
+                        -I ami-0db9040eb3ab74509 -r \"role[webserver_role]\" \
+                        -Z ${params['region']}b -g sg-0ad135270a3c8bbed --ssh-key \
+                        jenkins-slave -i ~/.ssh/jenkins-slave.pem -f t2.micro \
+                        --region ${params['region']} -U ec2-user --sudo --use-sudo-password"
                     }
                 }
             }
