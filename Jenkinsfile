@@ -34,7 +34,7 @@ pipeline {
                     //     curl -sSL https://get.rvm.io | sudo bash -s stable
                     //     sudo usermod -a -G rvm `whoami`
                     // '''
-                    sh 'sudo amazon-linux-extras install ruby2.4'
+                    sh 'sudo amazon-linux-extras install ruby2.6'
                     sh 'sudo gem install knife-ec2'
                 }
             }
