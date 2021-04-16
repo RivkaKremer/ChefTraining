@@ -10,5 +10,5 @@ service 'httpd' do
 end
 
 file '/var/www/html/index.html' do
-    content <Place the content here>
+    content '<Place the content here>'
 end
