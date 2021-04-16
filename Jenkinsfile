@@ -28,14 +28,7 @@ pipeline {
                         sh 'wget https://packages.chef.io/files/stable/chefdk/4.13.3/el/8/chefdk-4.13.3-1.el7.x86_64.rpm'
                         sh 'sudo yum -y install chefdk-4.13.3-1.el7.x86_64.rpm'
                     }
-                    // sh 'sudo yum install -y curl gpg gcc gcc-c++ make'
-                    // sh '''
-                    //     sudo gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-                    //     curl -sSL https://get.rvm.io | sudo bash -s stable
-                    //     sudo usermod -a -G rvm `whoami`
-                    // '''
-                    sh 'sudo amazon-linux-extras install ruby2.6'
-                    sh 'sudo gem install knife-ec2'
+                    sh 'sudo /opt/chefdk/embedded/bin/gem install knife-ec2'
                 }
             }
         }
