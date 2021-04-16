@@ -17,7 +17,7 @@ pipeline {
         )
     }
     stages{
-        stage("Install ChefDK"){
+        stage("Install ChefDK & Plugins"){
             steps{
                 script{
                     chefdkExist = fileExists '/usr/bin/chef-client'
@@ -28,15 +28,17 @@ pipeline {
                         sh 'wget https://packages.chef.io/files/stable/chefdk/4.13.3/el/8/chefdk-4.13.3-1.el7.x86_64.rpm'
                         sh 'sudo yum -y install chefdk-4.13.3-1.el7.x86_64.rpm'
                     }
+                    sh 'sudo yum -y install make g++ libxml2 libxml2-dev libxslt1-dev zlib1g-dev'
+                    sh 'sudo /opt/chef/embedded/bin/gem install knife-ec2'
                 }
             }
         }
-        stage('Upload Cookbook To Server, Converge Nodes'){
+        stage('Upload Cookbook To Chef Server'){
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                     sh 'mkdir -p $CHEFREPO/chef-repo/cookcooks/apache'
                     sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookcooks/apache'
-                    sh 'knife cookbook upload apache --force -o $CHEFREPO/chef-repo/cookcooks -c $CHEFREPO/chef-repo/.chef/config.rb'
+                    sh 'knife cookbook upload apache'
                 }
             }
         }
