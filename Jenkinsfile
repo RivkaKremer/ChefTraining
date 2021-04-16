@@ -17,7 +17,7 @@ pipeline {
         )
     }
     stages{
-        stage("Install ChefDK & Ruby"){
+        stage("Install ChefDK"){
             steps{
                 script{
                     chefdkExist = fileExists '/usr/bin/chef-client'
@@ -68,7 +68,7 @@ pipeline {
         stage('Boostrap Apache EC2 Node'){
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
-                    dir("$CHEFREPO/chef-repo"){
+                    dir("$CHEFREPO/chef-repo/.chef"){
                         sh "sudo knife ec2 server create \
                         -I ami-0db9040eb3ab74509 -r \"role[webserver_role]\" \
                         -Z ${params['Region']}b -g sg-0ad135270a3c8bbed --ssh-key \
