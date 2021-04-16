@@ -10,5 +10,5 @@ service 'httpd' do
 end
 
 file '/var/www/html/index.html' do
-    content 'Welcome to your chef node'
+    content <Place the content here>
 end

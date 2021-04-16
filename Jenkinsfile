@@ -32,6 +32,13 @@ pipeline {
                 }
             }
         }
+        stage('Update Apache Html Content'){
+            steps{
+                currentTime = sh(script: "date '+%F %T'", returnStdout: true).trim()
+                sh "sed -i 's/<Place the content here>/<h1>Welcome ${params['User']}</h1><h2>The time now is: $currentTime</h2>/' apache/recipes/default.rb"
+                sh 'cat apache/recipes/default.rb'
+            }
+        }
         stage('Upload Cookbook To Chef Server'){
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
@@ -48,7 +55,22 @@ pipeline {
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                     sh 'mv webserver_role.json $CHEFREPO/chef-repo/roles'
                     dir("$CHEFREPO/chef-repo/roles"){
-                        sh  (script: 'knife role from file webserver_role.json', returnStdout:true)
+                        sh 'knife role from file webserver_role.json'
+                    }
+                }
+            }
+        }
+        stage('Boostrap Apache EC2 Node'){
+            steps{
+                withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
+                    dir("$CHEFREPO/chef-repo"){
+                        sh """
+                        sudo knife ec2 server create 
+                        -I ami-0db9040eb3ab74509 -r \"role[webserver_role]\" 
+                        -Z eu-central-1b -g sg-0ad135270a3c8bbed --ssh-key 
+                        jenkins-slave -i ~/.ssh/jenkins-slave.pem -f t2.micro 
+                        --region ${params['region']} -U ec2-user --sudo --use-sudo-password
+                        """
                     }
                 }
             }
