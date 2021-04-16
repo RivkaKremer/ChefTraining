@@ -73,7 +73,8 @@ pipeline {
                         -I ami-0db9040eb3ab74509 -r \"role[webserver_role]\" \
                         -Z ${params['Region']}b -g sg-0ad135270a3c8bbed --ssh-key \
                         jenkins-slave -i ~/.ssh/jenkins-slave.pem -f t2.micro \
-                        --region ${params['Region']} -U ec2-user --sudo --use-sudo-password --chef-license accept"
+                        --region ${params['Region']} -U ec2-user --sudo \
+                        --use-sudo-password --chef-license accept --yes"
                     }
                 }
             }
