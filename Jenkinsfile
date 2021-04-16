@@ -29,7 +29,7 @@ pipeline {
                         sh 'sudo yum -y install chefdk-4.13.3-1.el7.x86_64.rpm'
                     }
                     sh 'sudo yum -y install make g++ libxml2 libxml2-dev libxslt1-dev zlib1g-dev'
-                    sh 'sudo /opt/chef/embedded/bin/gem install knife-ec2'
+                    sh 'sudo gem install knife-ec2'
                 }
             }
         }
