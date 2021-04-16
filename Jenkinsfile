@@ -32,6 +32,7 @@ pipeline {
                 }
             }
         }
+        // Update the index.html page with the value provided by the user as a parameter
         stage('Update Apache Html Content'){
             steps{
                 script{
@@ -47,8 +48,10 @@ pipeline {
         stage('Upload Cookbook To Chef Server'){
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
+                    // copy the cookbook files from the local repository into the chef server's starter-kit cookbooks folder
                     sh 'mkdir -p $CHEFREPO/chef-repo/cookbooks/apache'
                     sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookbooks/apache'
+                    // upload cookbook to chef server
                     dir("$CHEFREPO/chef-repo/cookbooks"){
                         sh 'knife cookbook upload apache'
                     }
@@ -58,6 +61,7 @@ pipeline {
         stage('Update Role On Chef Server'){
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
+                    // copy role json file from local repo into the chef server's starter-kit roles folder
                     sh 'mv webserver_role.json $CHEFREPO/chef-repo/roles'
                     dir("$CHEFREPO/chef-repo/roles"){
                         sh 'knife role from file webserver_role.json'
@@ -69,6 +73,9 @@ pipeline {
             steps{
                 withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                     dir("$CHEFREPO/chef-repo/.chef"){
+                        // I used knife-ec2 plugin to create an ec2 Amazon linux server.
+                        // The region was chosen bythe user.
+                        // The role installs and configures apache recipe on the server, with the modified content in the index.html file.
                         sh "sudo knife ec2 server create \
                         -I ami-0db9040eb3ab74509 -r \"role[webserver_role]\" \
                         -Z ${params['Region']}b -g sg-0ad135270a3c8bbed --ssh-key \
@@ -83,6 +90,11 @@ pipeline {
     post{
         always{
             sh 'rm -f chef-16.13.16-1.el7.x86_64.rpm'
+            emailext body: 'A Test EMail', 
+            recipientProviders: [[$class: 
+            'DevelopersRecipientProvider'], 
+            [$class: 'RequesterRecipientProvider']], 
+            subject: 'Test'
         }
     }
 }
