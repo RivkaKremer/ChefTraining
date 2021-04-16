@@ -34,15 +34,11 @@ pipeline {
         }
         stage('Upload Cookbook To Chef Server'){
             steps{
-                script{
-                    withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
-                        sh 'mkdir -p $CHEFREPO/chef-repo/cookbooks/apache'
-                        sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookbooks/apache'
-                        sh 'ls -aR $CHEFREPO'
-                        dir("$CHEFREPO/chef-repo/cookbooks"){
-                            sh 'ls -aR $CHEFREPO'
-                            sh 'sh knife cookbook upload apache'
-                        }
+                withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
+                    sh 'mkdir -p $CHEFREPO/chef-repo/cookbooks/apache'
+                    sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookbooks/apache'
+                    dir("$CHEFREPO/chef-repo/cookbooks"){
+                        sh 'knife cookbook upload apache'
                     }
                 }
             }
@@ -53,7 +49,7 @@ pipeline {
                     withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                         sh 'mv webserver_role.json $CHEFREPO/chef-repo/roles'
                         dir("$CHEFREPO/chef-repo/roles"){
-                            sh 'sh knife role from file webserver_role.json'
+                            sh  (script: 'knife role from file webserver_role.json', returnStdout:true)
                         }
                     }
                 }
