@@ -34,10 +34,14 @@ pipeline {
         }
         stage('Upload Cookbook To Chef Server'){
             steps{
-                withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
+                script{
+                    withCredentials([zip(credentialsId: 'chef-server-secret', variable: 'CHEFREPO')]){
                     sh 'mkdir -p $CHEFREPO/chef-repo/cookcooks/apache'
                     sh 'mv $WORKSPACE/apache/* $CHEFREPO/chef-repo/cookcooks/apache'
-                    sh 'knife cookbook upload apache'
+                    dir("$CHEFREPO/chef-repo"){
+                        sh 'knife cookbook upload apache'
+                    }
+                }
                 }
             }
         }
