@@ -4,19 +4,20 @@ def NUM_TO_KEEP_STR = '20'
 
 properties([ 
     parameters([
-        string(name: 'User', defaultValue: '', description: 'Fill in a user name to be displayed on servers index.html page', ),
         [$class: 'CascadeChoiceParameter', 
         choiceType: 'PT_SINGLE_SELECT', 
         description: 'Choose a region from the list', 
-        filterLength: 1, filterable: true, name: 'choice2', 
+        filterLength: 1, filterable: true, name: 'Region', 
         randomName: 'Region', 
         referencedParameters: 'choice1', 
         script: [$class: 'GroovyScript', 
                 fallbackScript: [classpath: [], sandbox: false, script: 'return ["error"]'], 
                 script: [classpath: [], sandbox: false, 
                          script: '''
-                            def command = 'aws ec2 describe-regions --all-regions --query Regions[].{Name:RegionName} --output text'
-                            def proc = command.execute()
+ 
+
+                            command = 'aws ec2 describe-regions --all-regions --query Regions[].{Name:RegionName} --output text'
+                            proc = command.execute()
                             proc.waitFor()     
 
                             def output = proc.in.text
@@ -44,14 +45,14 @@ pipeline {
         buildDiscarder(logRotator(daysToKeepStr: DAY_TO_KEEP_STR, numToKeepStr: NUM_TO_KEEP_STR))
         timestamps()
     }
-    // parameters{
-    //     string(
-    //         name: 'User', defaultValue: '', description: "Fill in a user name to be displayed on servers index.html page"
-    //     )
-    //     string(
-    //         name: 'Region', defaultValue: 'eu-central-1', description: "Choose a region"
-    //     )
-    // }
+    parameters{
+        string(
+            name: 'User', defaultValue: '', description: "Fill in a user name to be displayed on servers index.html page"
+        )
+        string(
+            name: 'Region', defaultValue: 'eu-central-1', description: "Choose a region"
+        )
+    }
     stages{
         stage("Install ChefDK"){
             steps{
