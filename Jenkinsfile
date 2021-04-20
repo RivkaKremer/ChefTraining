@@ -7,14 +7,30 @@ properties([
         string(name: 'User', defaultValue: '', description: 'Fill in a user name to be displayed on servers index.html page', ),
         [$class: 'CascadeChoiceParameter', 
         choiceType: 'PT_SINGLE_SELECT', 
-        description: 'Active Choices Reactive parameter', 
+        description: 'Choose a region from the list', 
         filterLength: 1, filterable: true, name: 'choice2', 
-        randomName: 'choice-parameter-7601237141171', 
+        randomName: 'Region', 
         referencedParameters: 'choice1', 
         script: [$class: 'GroovyScript', 
                 fallbackScript: [classpath: [], sandbox: false, script: 'return ["error"]'], 
                 script: [classpath: [], sandbox: false, 
-                         script: ''
+                         script: '''
+                            def command = 'aws ec2 describe-regions --all-regions --query Regions[].{Name:RegionName} --output text'
+                            def proc = command.execute()
+                            proc.waitFor()     
+
+                            def output = proc.in.text
+                            def exitcode= proc.exitValue()
+                            def error = proc.err.text
+
+                            if (error) {
+                                println "Std Err: ${error}"
+                                println "Process exit code: ${exitcode}"
+                                return exitcode
+                            }
+
+                            print output.split().collect { "'$it'" }
+                         '''
                         ]
             ]
         ]
