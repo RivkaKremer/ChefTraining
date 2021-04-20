@@ -2,20 +2,27 @@ def DAY_TO_KEEP_STR = '2'
 
 def NUM_TO_KEEP_STR = '20'
 
+properties([ 
+    parameters([
+        string(name: 'DEPLOY_ENV', defaultValue: 'TESTING', description: 'The target environment', ),
+        [$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT', description: 'Active Choices Reactive parameter', filterLength: 1, filterable: true, name: 'choice2', randomName: 'choice-parameter-7601237141171', referencedParameters: 'choice1', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: 'return ["error"]'], script: [classpath: [], sandbox: false, script: 'if(choice1.equals("aaa")){return [\'a\', \'b\']} else {return [\'aaaaaa\',\'fffffff\']}']]]
+    ])
+])
+
 pipeline {
     agent any
     options{
         buildDiscarder(logRotator(daysToKeepStr: DAY_TO_KEEP_STR, numToKeepStr: NUM_TO_KEEP_STR))
         timestamps()
     }
-    parameters{
-        string(
-            name: 'User', defaultValue: '', description: "Fill in a user name to be displayed on servers index.html page"
-        )
-        string(
-            name: 'Region', defaultValue: 'eu-central-1', description: "Choose a region"
-        )
-    }
+    // parameters{
+    //     string(
+    //         name: 'User', defaultValue: '', description: "Fill in a user name to be displayed on servers index.html page"
+    //     )
+    //     string(
+    //         name: 'Region', defaultValue: 'eu-central-1', description: "Choose a region"
+    //     )
+    // }
     stages{
         stage("Install ChefDK"){
             steps{
