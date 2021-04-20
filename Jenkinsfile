@@ -4,8 +4,21 @@ def NUM_TO_KEEP_STR = '20'
 
 properties([ 
     parameters([
-        string(name: 'DEPLOY_ENV', defaultValue: 'TESTING', description: 'The target environment', ),
-        [$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT', description: 'Active Choices Reactive parameter', filterLength: 1, filterable: true, name: 'choice2', randomName: 'choice-parameter-7601237141171', referencedParameters: 'choice1', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: 'return ["error"]'], script: [classpath: [], sandbox: false, script: 'if(choice1.equals("aaa")){return [\'a\', \'b\']} else {return [\'aaaaaa\',\'fffffff\']}']]]
+        string(name: 'User', defaultValue: '', description: 'Fill in a user name to be displayed on servers index.html page', ),
+        [$class: 'CascadeChoiceParameter', 
+        choiceType: 'PT_SINGLE_SELECT', 
+        description: 'Active Choices Reactive parameter', 
+        filterLength: 1, filterable: true, name: 'choice2', 
+        randomName: 'choice-parameter-7601237141171', 
+        referencedParameters: 'choice1', 
+        script: [$class: 'GroovyScript', 
+                fallbackScript: [classpath: [], sandbox: false, script: 'return ["error"]'], 
+                script: [classpath: [], sandbox: false, 
+                         script: ''
+                        ]
+            ]
+        ]
+
     ])
 ])
 
